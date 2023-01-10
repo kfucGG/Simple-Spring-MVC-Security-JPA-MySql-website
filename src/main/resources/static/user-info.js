@@ -1,4 +1,4 @@
-let url = "http://localhost:7070/api/profile";
+let url = "http://localhost:8080/api/profile";
 function getUser() {
     return fetch(url).then(response => response.json());
 }

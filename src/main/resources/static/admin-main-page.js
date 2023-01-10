@@ -1,4 +1,4 @@
-let url = "http://localhost:7070/api";
+let url = "http://localhost:8080/api";
 showAll();
 
 function getAll() {

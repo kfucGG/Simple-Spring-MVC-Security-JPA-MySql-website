@@ -1,4 +1,4 @@
-let saveurl = "http://localhost:7070/api/saveuser";
+let saveurl = "http://localhost:8080/api/saveuser";
 
 const formElement = document.getElementById("addForm");
 formElement.addEventListener("submit", e => {
