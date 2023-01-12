@@ -72,53 +72,5 @@ function openModal(nameForm, nameModal, id) {
     return formData;
 }
 
-function editModalData(id) {
-    const formData = openModal("formEditUser", "#editModal", id)
 
-    formData.addEventListener("submit", e => {
-        e.preventDefault();
-        const valueFromForm = new FormData(formData);
-        let userRoles = [];
-        for(let i = 0; i < formData.roles.options.length; i++) {
-            if (formData.roles.options[i].selected) userRoles.push({
-                "roleName" : formData.roles.options[i].value
-            })
-        }
-        fetch(url + "/users/update", {
-            method: "PATCH",
-            headers: {
-                "Content-Type": "application/json",
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify(
-                {
-                    "id": valueFromForm.get("id"),
-                    "name": valueFromForm.get("name"),
-                    "password": valueFromForm.get("password"),
-                    "email": valueFromForm.get("email"),
-                    "age": valueFromForm.get("age"),
-                    "userRoles": userRoles
-                }
-            )
-        }).then(() => {
-            $('#editFormCloseButton').click();
-            showAll();
-        })
-    })
-}
-function deleteModalData(id) {
-    openModal("formDeleteUser", "#deleteModal", id)
-        .addEventListener("submit", e => {
-        e.preventDefault();
-        fetch(url + `/users/${id}` , {
-            method: "DELETE",
-            headers: {
-                "Content-Type" : "application/json"
-            }
-        }).then(() => {
-            $('#deleteFormCloseButton').click();
-            showAll();
-        })
-    })
-}
 
