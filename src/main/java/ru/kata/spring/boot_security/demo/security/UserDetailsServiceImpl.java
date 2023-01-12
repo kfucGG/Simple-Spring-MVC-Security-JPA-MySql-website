@@ -19,6 +19,7 @@ import java.util.Optional;
 
 
 @Service(value = "userDetailsService")
+@Transactional(readOnly = true)
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UserService userService;

@@ -1,7 +1,10 @@
 package ru.kata.spring.boot_security.demo.controllers;
 
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import ru.kata.spring.boot_security.demo.entity.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
@@ -17,8 +20,13 @@ public class AdminRestController {
         this.userService = userService;
     }
 
+    @GetMapping("/showusers")
+    public ModelAndView showAll() {
+        return new ModelAndView("admin_main_page");
+    }
     @PostMapping("/saveuser")
     public String saveUser(@RequestBody User user) {
+        System.out.println(user);
         userService.save(user);
         return "ok";
     }

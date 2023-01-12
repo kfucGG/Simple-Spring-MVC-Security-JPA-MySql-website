@@ -24,7 +24,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional
     public void save(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
@@ -32,13 +32,13 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional
     public void update(User newUser) {
         userRepository.save(updateUserEntity(userRepository.findById(newUser.getId()).get(), newUser));
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional
     public void delete(long id) {
         userRepository.delete(findById(id));
     }

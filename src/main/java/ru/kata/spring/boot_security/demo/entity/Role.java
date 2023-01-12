@@ -24,12 +24,13 @@ public class Role implements GrantedAuthority, Serializable {
     @JsonIgnore
     private Set<User> users;
 
+    public Role() {
+    }
+
     public Role(String roleName) {
         this.roleName = roleName;
     }
 
-    public Role() {
-    }
     public Set<User> getUsers() {
         return users;
     }

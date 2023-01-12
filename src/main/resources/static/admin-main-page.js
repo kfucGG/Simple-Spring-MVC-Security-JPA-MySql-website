@@ -1,8 +1,13 @@
-let url = "http://localhost:8080/api";
+let url = "http://localhost:7070/api";
 showAll();
 
 function getAll() {
-    return fetch(url + "/users");
+    return fetch(url + "/users", {
+        headers : {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+    });
 }
 
 function getUser() {
@@ -13,13 +18,13 @@ function getUserById(id) {
     return fetch(url + "/users/" + id ).then(response => response.json());
 }
 getUser().then(data => {
-    $("#navbarUserInfo").append(data.name + " " + data.userRoles[0].roleName);
+    $("#navbarUserInfo").append(data.name + " " + data.userRoles.map(role => " " + role.roleName));
     let info = `$(
                         <td>${data.id}</td>
                         <td>${data.name}</td>
                         <td>${data.age}</td>
                         <td>${data.email}</td>
-                        <td>${data.userRoles[0].roleName}</td>
+                        <td>${data.userRoles.map(role => " " + role.roleName)}</td>
                      )`
     $("#adminInfo").append(info);
 });
@@ -35,7 +40,7 @@ function showAll() {
         <td>${user.name}</td>
         <td>${user.age}</td>
         <td>${user.email}</td>
-        <td>${user.userRoles[0].roleName}</td>
+        <td>${user.userRoles.map(role => " " + role.roleName)}</td>
          <td>
             <button type="button" class="btn btn-warning" data-bs-toogle="modal"
             data-bs-target="#editModal" onclick="editModalData(${user.id})">Edit</button>
@@ -66,6 +71,41 @@ function openModal(nameForm, nameModal, id) {
     })
     return formData;
 }
+
+function editModalData(id) {
+    const formData = openModal("formEditUser", "#editModal", id)
+
+    formData.addEventListener("submit", e => {
+        e.preventDefault();
+        const valueFromForm = new FormData(formData);
+        let userRoles = [];
+        for(let i = 0; i < formData.roles.options.length; i++) {
+            if (formData.roles.options[i].selected) userRoles.push({
+                "roleName" : formData.roles.options[i].value
+            })
+        }
+        fetch(url + "/users/update", {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(
+                {
+                    "id": valueFromForm.get("id"),
+                    "name": valueFromForm.get("name"),
+                    "password": valueFromForm.get("password"),
+                    "email": valueFromForm.get("email"),
+                    "age": valueFromForm.get("age"),
+                    "userRoles": userRoles
+                }
+            )
+        }).then(() => {
+            $('#editFormCloseButton').click();
+            showAll();
+        })
+    })
+}
 function deleteModalData(id) {
     openModal("formDeleteUser", "#deleteModal", id)
         .addEventListener("submit", e => {
@@ -82,31 +122,3 @@ function deleteModalData(id) {
     })
 }
 
-function editModalData(id) {
-    const formData = openModal("formEditUser", "#editModal", id)
-    formData.addEventListener("submit", e => {
-        e.preventDefault();
-        const valueFromForm = new FormData(formData);
-        fetch(url + "/users/update", {
-            method: "PATCH",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(
-                {
-                    "id": valueFromForm.get("id"),
-                    "name": valueFromForm.get("name"),
-                    "password": valueFromForm.get("password"),
-                    "email": valueFromForm.get("email"),
-                    "age": valueFromForm.get("age"),
-                    "userRoles": [{
-                        "roleName": valueFromForm.get("roles")
-                    }]
-                }
-            )
-        }).then(() => {
-            $('#editFormCloseButton').click();
-            showAll();
-        })
-    })
-}

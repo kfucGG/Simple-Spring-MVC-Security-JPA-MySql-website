@@ -1,4 +1,4 @@
-let url = "http://localhost:8080/api/profile";
+let url = "http://localhost:7070/api/profile";
 function getUser() {
     return fetch(url).then(response => response.json());
 }
@@ -14,7 +14,7 @@ getUser().then(data => {
             <td>${data.name}</td>
             <td>${data.age}</td>
             <td>${data.email}</td>
-            <td>${data.userRoles[0].roleName}</td>
+            <td>${data.userRoles.map(role => " " + role.roleName)}</td>
         </tr>
     )`
     $("#userTable").append(userInfo);

@@ -7,6 +7,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 import ru.kata.spring.boot_security.demo.entity.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
@@ -21,6 +22,10 @@ public class UserRestController {
         this.userService = userService;
     }
 
+    @GetMapping("/user")
+    public ModelAndView showProfile() {
+        return new ModelAndView("user-profile");
+    }
 
     @GetMapping(value = "/profile", produces = "application/json")
     public ResponseEntity<User> userInfo(@AuthenticationPrincipal User user) {
