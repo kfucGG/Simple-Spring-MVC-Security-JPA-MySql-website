@@ -29,7 +29,6 @@ public class UserRestController {
 
     @GetMapping(value = "/profile", produces = "application/json")
     public ResponseEntity<User> userInfo(@AuthenticationPrincipal User user) {
-
         return ResponseEntity.ok(user);
     }
 

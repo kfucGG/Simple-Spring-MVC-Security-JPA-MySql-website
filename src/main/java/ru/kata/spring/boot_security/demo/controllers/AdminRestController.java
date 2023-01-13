@@ -1,6 +1,7 @@
 package ru.kata.spring.boot_security.demo.controllers;
 
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -9,6 +10,8 @@ import ru.kata.spring.boot_security.demo.entity.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 import java.util.List;
+
+import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
 @RequestMapping("/api")
@@ -25,31 +28,29 @@ public class AdminRestController {
         return new ModelAndView("admin_main_page");
     }
     @PostMapping("/saveuser")
-    public String saveUser(@RequestBody User user) {
-        System.out.println(user);
+    public ResponseEntity saveUser(@RequestBody User user) {
         userService.save(user);
-        return "ok";
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/users")
-    public List<User> findAll() {
-        return userService.findAll();
+    public ResponseEntity<List<User>> findAll() {
+        return ResponseEntity.ok(userService.findAll());
     }
 
     @GetMapping("/users/{id}")
-    public User findById(@PathVariable("id") long id) {
-        return userService.findById(id);
+    public ResponseEntity<User> findById(@PathVariable("id") long id) {
+        return ResponseEntity.ok(userService.findById(id));
     }
 
     @DeleteMapping("/users/{id}")
-    public String deleteById(@PathVariable("id") long id) {
+    public ResponseEntity deleteById(@PathVariable("id") long id) {
         userService.delete(id);
-        return "ok";
+        return ResponseEntity.ok().build();
     }
     @PatchMapping("/users/update")
-    public String updateUser(@RequestBody User user) {
-        System.out.println(user);
+    public ResponseEntity updateUser(@RequestBody User user) {
         userService.update(user);
-        return "ok";
+        return ResponseEntity.ok().build();
     }
 }
