@@ -3,6 +3,7 @@ package ru.kata.spring.boot_security.demo.service;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.entity.User;
@@ -12,6 +13,7 @@ import java.util.List;
 
 
 @Service(value = "userService")
+@Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -24,7 +26,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional()
+    @Transactional
     public void save(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
@@ -32,11 +34,13 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public void update(User newUser) {
         userRepository.save(updateUserEntity(userRepository.findById(newUser.getId()).get(), newUser));
     }
 
     @Override
+    @Transactional
     public void delete(long id) {
         userRepository.delete(findById(id));
     }
