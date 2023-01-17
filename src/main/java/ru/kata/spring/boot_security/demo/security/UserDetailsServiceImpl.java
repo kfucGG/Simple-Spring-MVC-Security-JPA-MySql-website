@@ -30,7 +30,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
     @Override
-    @Transactional
     public UserDetails loadUserByUsername(String username) {
         User loggingUser = userService.findByName(username);
         return loggingUser;
